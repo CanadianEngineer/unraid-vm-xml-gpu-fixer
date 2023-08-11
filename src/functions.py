@@ -35,3 +35,12 @@ def prompt_file_select():
 		else:
 			print("User rejected the XML file, and no other XML files were found.")
 			return -1;
+	else: # Multiple files
+		print("There was more than 1 XML file found. Please select which file you want to fix.")
+		for file_i in range(len(files)):
+			fileName = files[file_i]
+			print("{index}: {name}".format(index=file_i + 1, name=fileName))
+		selectedFileInput = input("Select which file you want to fix: ");
+		selectedFileName = files[int(selectedFileInput) - 1]
+		selectedFile = open(selectedFileName)
+		return selectedFile;
