@@ -1,9 +1,9 @@
 {
 	"name": "unraid-vm-xml-gpu-fixer",
+	"author": "Andrew Lampert",
 	"version": "0.0.0",
 	"scripts": {
 		"build": "python3 src/main.py",
-		"watch": "find ./ -name '*.py' | entr -s 'npm run build'"
-	},
-	"author": "Andrew Lampert"
+		"watch": "find ./ -name '*.py' | entr -s 'clear; npm run build'"
+	}
 }
