@@ -1,6 +1,5 @@
 import os
 import json
-import xml.etree.ElementTree as ET
 
 from functions import *
 
@@ -21,9 +20,9 @@ while(selectedFile == False):
 	selectedFile = prompt_file_select();
 	if(selectedFile == -1):
 		exit(1) # Exit 1 => stop console running
-	print(selectedFile)
 
 # Parse file
+fix_file(selectedFile);
 
 # Confirm adjustments
 

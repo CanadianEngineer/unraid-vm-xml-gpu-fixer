@@ -1,4 +1,5 @@
 import os
+import xml.etree.ElementTree as ET
 
 # Prompts user for file select
 # Returns -1, 0, or a file
@@ -44,3 +45,39 @@ def prompt_file_select():
 		selectedFileName = files[int(selectedFileInput) - 1]
 		selectedFile = open(selectedFileName)
 		return selectedFile;
+
+def fix_file(xmlFile):
+	# Read XML File
+	print("\nFixing File \'{file}\'".format(file=xmlFile.name))
+
+	tree = ET.parse(xmlFile.name)
+	root = tree.getroot()
+
+	hostdevElements = root.findall('./devices/hostdev')
+
+	gpuElement = None;
+
+	# Finding GPU element (element that has a ROM)
+	for hostdevElement in hostdevElements:
+		roms = hostdevElement.findall('rom')
+		if(len(roms) > 0):
+			gpuElement = hostdevElement
+
+	gpuSourceAddress = gpuElement.find('./source/address')
+	gpuGuestAddress = gpuElement.find('./address')
+
+	# Finding sound device
+	gpuSoundElement = None;
+	for hostdevElement in hostdevElements:
+		sourceAddress = hostdevElement.find('./source/address')
+		if(sourceAddress != None):
+			if(
+				sourceAddress.attrib['domain'] == gpuSourceAddress.attrib['domain']
+				and sourceAddress.attrib['bus'] == gpuSourceAddress.attrib['bus']
+				and sourceAddress.attrib['slot'] == gpuSourceAddress.attrib['slot']
+				and sourceAddress.attrib['function'] != gpuSourceAddress.attrib['function']
+			):
+				gpuSoundElement = hostdevElement
+
+	# NOTE: Usually the sound device in Unraid is setup as a second device
+	# This change makes it on the same device, but separate function
