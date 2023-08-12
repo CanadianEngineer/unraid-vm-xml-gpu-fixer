@@ -78,6 +78,17 @@ def fix_file(xmlFile):
 				and sourceAddress.attrib['function'] != gpuSourceAddress.attrib['function']
 			):
 				gpuSoundElement = hostdevElement
+				gpuSoundSourceAddress = gpuSoundElement.find('./source/address')
+				gpuSoundGuestAddress = gpuSoundElement.find('./address')
 
 	# NOTE: Usually the sound device in Unraid is setup as a second device
 	# This change makes it on the same device, but separate function
+
+	gpuElement.set('multifunction', 'on')
+	gpuSoundElement.set('multifunction', 'on')
+
+	gpuSoundGuestAddress.set('bus', gpuGuestAddress.attrib['bus'])
+	gpuSoundGuestAddress.set('slot', gpuGuestAddress.attrib['slot'])
+	gpuSoundGuestAddress.set('function', gpuSoundSourceAddress.attrib['function'])
+
+	tree.write('output.xml')
