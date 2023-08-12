@@ -87,8 +87,13 @@ def fix_file(xmlFile):
 	gpuElement.set('multifunction', 'on')
 	gpuSoundElement.set('multifunction', 'on')
 
+	# Bus and Slot should match
 	gpuSoundGuestAddress.set('bus', gpuGuestAddress.attrib['bus'])
 	gpuSoundGuestAddress.set('slot', gpuGuestAddress.attrib['slot'])
+
+	# Function should take on the same value as the source address
 	gpuSoundGuestAddress.set('function', gpuSoundSourceAddress.attrib['function'])
 
-	tree.write('output.xml')
+	outputFileName = "{origFileName}-edited.xml".format(origFileName=xmlFile.name[:-4])
+	print("Saving changes to '{outputFileName}'".format(outputFileName=outputFileName))
+	tree.write(outputFileName)
